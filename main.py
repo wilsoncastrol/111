@@ -465,10 +465,11 @@ class StressAnalysisApp:
             self.lbl_sources.config(text="压力来源: 无明显来源")
 
         # 基线状态
-        if self.analyzer._baseline_ready:
+        baseline = self.analyzer.get_baseline_status()
+        if baseline["ready"]:
             self.lbl_baseline.config(text="基线: 已建立 ✅", fg="#4CAF50")
         else:
-            count = len(self.analyzer._baseline_samples)
+            count = baseline["sample_count"]
             self.lbl_baseline.config(text=f"基线: 建立中 ({count}/30)", fg="#FF9800")
 
     def _update_trend_chart(self):

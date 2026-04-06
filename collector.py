@@ -10,6 +10,8 @@ import collections
 from datetime import datetime
 from typing import Optional, Callable
 
+import numpy as np
+
 from config import (
     COLLECTION_INTERVAL,
     KEYBOARD_BUFFER_SIZE,
@@ -216,7 +218,6 @@ class DataCollector:
         # 按键间隔统计
         intervals = list(self._key_intervals)
         if intervals:
-            import numpy as np
             avg_interval = np.mean(intervals)
             std_interval = np.std(intervals)
             rhythm_regularity = 1.0 / (1.0 + std_interval) if std_interval > 0 else 1.0
@@ -258,7 +259,6 @@ class DataCollector:
         """提取文本输入特征"""
         pauses = list(self._input_pauses)
         if pauses:
-            import numpy as np
             avg_pause = np.mean(pauses)
             pause_count = len(pauses)
         else:

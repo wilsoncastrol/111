@@ -288,8 +288,8 @@ class StressVisualizer:
     @staticmethod
     def embed_in_tk(fig: Figure, parent_widget):
         """将Matplotlib图表嵌入Tkinter窗口"""
-        Canvas = _get_figure_canvas_tkagg()
-        canvas = Canvas(fig, master=parent_widget)
+        canvas_class = _get_figure_canvas_tkagg()
+        canvas = canvas_class(fig, master=parent_widget)
         canvas.draw()
         canvas.get_tk_widget().pack(fill="both", expand=True)
         return canvas

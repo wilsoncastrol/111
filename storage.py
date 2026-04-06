@@ -304,7 +304,8 @@ class StorageManager:
         })
 
         # 添加压力等级中文名称
-        level_names = {0: "低压力", 1: "正常", 2: "中等压力", 3: "高压力"}
+        from config import STRESS_LEVELS
+        level_names = {k: v["name"] for k, v in STRESS_LEVELS.items()}
         df_export["压力等级名称"] = df_export["压力等级"].map(level_names)
 
         # 选择导出的列

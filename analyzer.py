@@ -36,6 +36,9 @@ class StressAnalyzer:
     将压力分为4个等级：低压力(0)、正常(1)、中等压力(2)、高压力(3)
     """
 
+    # 压力来源识别阈值（特征分数超过此值视为压力来源）
+    STRESS_SOURCE_THRESHOLD = 60
+
     def __init__(self):
         # 历史特征缓冲（用于滑动窗口分析）
         self._history = collections.deque(maxlen=int(ANALYSIS_WINDOW / 5))  # 5秒采集一次
@@ -188,7 +191,7 @@ class StressAnalyzer:
     def _identify_sources(self, features: dict) -> dict:
         """识别压力的潜在来源"""
         sources = {}
-        threshold = 60  # 特征分数超过此值视为压力来源
+        threshold = self.STRESS_SOURCE_THRESHOLD
 
         # 任务过载：键盘速度高 + 鼠标活动高
         if features.get("keyboard_speed", 0) > threshold and features.get("mouse_activity", 0) > threshold:
@@ -285,6 +288,14 @@ class StressAnalyzer:
             "avg_score": round(float(avg_score), 1),
             "max_score": round(float(max(scores)), 1),
             "min_score": round(float(min(scores)), 1),
+        }
+
+    def get_baseline_status(self) -> dict:
+        """获取基线建立状态（公共接口）"""
+        return {
+            "ready": self._baseline_ready,
+            "sample_count": len(self._baseline_samples),
+            "target_count": 30,
         }
 
     def reset(self):
