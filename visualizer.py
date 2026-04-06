@@ -14,8 +14,18 @@ matplotlib.use("Agg")  # 非交互后端，适合嵌入Tkinter
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from matplotlib.figure import Figure
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from datetime import datetime, timedelta
+
+# FigureCanvasTkAgg 依赖 tkinter，延迟导入以支持无GUI环境
+FigureCanvasTkAgg = None
+
+def _get_figure_canvas_tkagg():
+    """延迟导入 FigureCanvasTkAgg（仅在GUI模式下需要）"""
+    global FigureCanvasTkAgg
+    if FigureCanvasTkAgg is None:
+        from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg as _FigureCanvasTkAgg
+        FigureCanvasTkAgg = _FigureCanvasTkAgg
+    return FigureCanvasTkAgg
 
 from config import (
     STRESS_LEVELS,
@@ -276,15 +286,16 @@ class StressVisualizer:
         return fig
 
     @staticmethod
-    def embed_in_tk(fig: Figure, parent_widget) -> FigureCanvasTkAgg:
+    def embed_in_tk(fig: Figure, parent_widget):
         """将Matplotlib图表嵌入Tkinter窗口"""
-        canvas = FigureCanvasTkAgg(fig, master=parent_widget)
+        Canvas = _get_figure_canvas_tkagg()
+        canvas = Canvas(fig, master=parent_widget)
         canvas.draw()
         canvas.get_tk_widget().pack(fill="both", expand=True)
         return canvas
 
     @staticmethod
-    def update_canvas(canvas: FigureCanvasTkAgg, new_fig: Figure):
+    def update_canvas(canvas, new_fig: Figure):
         """更新已嵌入的图表"""
         canvas.figure = new_fig
         canvas.draw()
