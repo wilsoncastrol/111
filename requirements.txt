@@ -1,0 +1,18 @@
+# 多模态交互压力数据分析系统 - 依赖包
+# 安装方式: pip install -r requirements.txt
+
+# 键盘鼠标监听（需要系统权限）
+pynput>=1.7.0
+
+# 数据处理
+pandas>=1.5.0
+
+# 可视化
+matplotlib>=3.5.0
+numpy>=1.21.0
+
+# Excel 导出
+openpyxl>=3.0.0
+
+# 系统信息（窗口检测等）
+psutil>=5.9.0
