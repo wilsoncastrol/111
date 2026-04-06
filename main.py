@@ -295,10 +295,10 @@ class StressMonitorApp(tk.Tk):
 
             tk.Label(card, text=title, font=(FONT_FAMILY, 9),
                     fg=COLORS["text_secondary"], bg=COLORS["card_bg"],
-                    padx=12, pady=(8, 0)).pack(anchor="w")
+                    padx=12).pack(anchor="w", pady=(8, 0))
             tk.Label(card, text=value, font=(FONT_FAMILY, 14, "bold"),
                     fg=color, bg=COLORS["card_bg"],
-                    padx=12, pady=(0, 8)).pack(anchor="w")
+                    padx=12).pack(anchor="w", pady=(0, 8))
 
         # ----- 中间：图表行 -----
         charts_frame = tk.Frame(container, bg=COLORS["bg"])

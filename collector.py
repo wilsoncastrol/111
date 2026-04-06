@@ -249,14 +249,16 @@ class DataCollector:
         """获取当前活动窗口名称（跨平台）"""
         try:
             import subprocess
-            if __import__("platform").system() == "Windows":
+            import platform as _platform
+            current_os = _platform.system()
+            if current_os == "Windows":
                 import ctypes
                 hwnd = ctypes.windll.user32.GetForegroundWindow()
                 length = ctypes.windll.user32.GetWindowTextLengthW(hwnd)
                 buf = ctypes.create_unicode_buffer(length + 1)
                 ctypes.windll.user32.GetWindowTextW(hwnd, buf, length + 1)
                 return buf.value
-            elif __import__("platform").system() == "Darwin":
+            elif current_os == "Darwin":
                 result = subprocess.run(
                     ["osascript", "-e",
                      'tell application "System Events" to get name of first process whose frontmost is true'],
